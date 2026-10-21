@@ -14,15 +14,16 @@ try:
     from nimare.meta.cbma import MKDADensity, ALE, KDA
     from nimare.nimads import Studyset, Annotation
     from nimare.reports.base import run_reports
-
-    NIMARE_AVAILABLE = True
-except ImportError:
-    NIMARE_AVAILABLE = False
-
-if not NIMARE_AVAILABLE:
+except ImportError as exc:
+    # Report the real failure: an installed but incompatible NiMARE (0.21+ dropped
+    # nimare.nimads.Annotation) used to be reported as "NiMARE is not installed".
+    if getattr(exc, "name", None) == "nimare":
+        message = "NiMARE is not installed."
+    else:
+        message = f"Could not import NiMARE: {exc}. autonima meta needs nimare<0.21."
     raise ImportError(
-        "NiMARE is not installed. Please install with: pip install autonima[meta]"
-    )
+        f'{message} Install a supported version with: pip install "nimare<0.21"'
+    ) from exc
 
 
 def create_estimator(estimator_name, estimator_args):

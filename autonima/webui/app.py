@@ -45,7 +45,7 @@ def _ensure_fastapi_imports():
         from pydantic import BaseModel, Field
     except ImportError as exc:
         raise ImportError(
-            "FastAPI UI dependencies are missing. Install with `pip install -e .[ui]`."
+            'FastAPI UI dependencies are missing. Install with `pip install -e ".[ui]"`.'
         ) from exc
 
     return {
@@ -710,7 +710,7 @@ def run_ui_server(
         import uvicorn
     except ImportError as exc:
         raise ImportError(
-            "Uvicorn is required for `autonima ui`. Install with `pip install -e .[ui]`."
+            'Uvicorn is required for `autonima ui`. Install with `pip install -e ".[ui]"`.'
         ) from exc
 
     workspace_path = Path(workspace).expanduser() if workspace else Path.cwd()

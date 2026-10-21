@@ -158,15 +158,17 @@ LLM-backed workflows require API credentials:
 If `autonima meta` fails with an import error, install:
 
 ```bash
-pip install -e .[meta]
+pip install -e ".[meta]"
 ```
+
+The error names the import that failed. NiMARE 0.21 and later are incompatible; the same command replaces them with a supported version.
 
 ## Missing Readability Support
 
 Enhanced HTML cleaning needs:
 
 ```bash
-pip install -e .[readability]
+pip install -e ".[readability]"
 ```
 
 and a working Node.js installation.

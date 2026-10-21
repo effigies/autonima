@@ -5,7 +5,7 @@ Autonima can run coordinate-based meta-analysis on the NiMADS outputs produced b
 ## Install Prerequisites
 
 ```bash
-pip install -e .[meta]
+pip install -e ".[meta]"
 ```
 
 ## Input Folder

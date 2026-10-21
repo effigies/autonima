@@ -68,21 +68,28 @@ created in one can be run from the other. See the
 
 ## Install
 
+Autonima needs Python 3.10 or newer (tested on 3.10 through 3.13).
+
 ```bash
-git clone git@github.com:neurostuff/autonima.git
+git clone https://github.com/neurostuff/autonima.git
 cd autonima
-pip install -e .
+pip install -e ".[llm,meta,ui]"
 ```
 
-Extras:
+That is the full install. The base install (`pip install -e .`) has no LLM
+client, so it runs `autonima run-search` but not screening. Each extra adds one
+capability; keep the quotes, which zsh needs:
 
 ```bash
-pip install -e .[llm]          # screening and other LLM-backed workflows
-pip install -e .[meta]         # `autonima meta`
-pip install -e .[readability]  # enhanced HTML extraction
-pip install -e .[ui]           # `autonima ui` local web app
-pip install -e .[docs]         # local docs build
+pip install -e ".[llm]"          # screening, parsing and annotation (OpenAI-compatible API)
+pip install -e ".[meta]"         # `autonima meta`
+pip install -e ".[ui]"           # `autonima ui` local web app
+pip install -e ".[readability]"  # optional enhanced HTML extraction; needs Node.js
+pip install -e ".[docs]"         # local docs build
 ```
+
+LLM stages read your key from `OPENAI_API_KEY`, and NCBI asks for a contact
+address in the config's `search.email`.
 
 ## Quickstart
 
@@ -112,6 +119,7 @@ search:
   database: "pubmed"
   query: "schizophrenia AND working memory AND fMRI"
   max_results: 100
+  email: "your.email@example.com"  # contact address for NCBI
 
 retrieval:
   sources:

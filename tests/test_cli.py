@@ -1,12 +1,15 @@
 from importlib import resources
+import logging
 import os
 import subprocess
 import sys
+import types
 
 from click.testing import CliRunner
 
 from autonima.cli import (
     create_sample_config,
+    meta,
     run,
     run_abstract,
     run_search,
@@ -289,3 +292,31 @@ def test_run_abstract_passes_abstract_stop_after_stage(tmp_path, monkeypatch):
     assert result.exit_code == 0
     assert captured["stop_after_stage"] == "abstract"
     assert captured["force_reextract_incomplete_fulltext"] is False
+
+
+def test_meta_reports_an_incompatible_nimare_instead_of_calling_it_missing(
+    tmp_path, monkeypatch, caplog
+):
+    # NiMARE 0.21+ is installable but no longer exports nimare.nimads.Annotation. That used to be
+    # reported as "NiMARE is not installed", which sent users to reinstall the same broken version.
+    stand_ins = {
+        "nimare": {},
+        "nimare.correct": {"FDRCorrector": object, "FWECorrector": object},
+        "nimare.workflows": {"CBMAWorkflow": object},
+        "nimare.meta": {},
+        "nimare.meta.cbma": {"MKDADensity": object, "ALE": object, "KDA": object},
+        "nimare.nimads": {"Studyset": object},
+    }
+    for name, attrs in stand_ins.items():
+        module = types.ModuleType(name)
+        module.__dict__.update(attrs)
+        monkeypatch.setitem(sys.modules, name, module)
+    monkeypatch.delitem(sys.modules, "autonima.meta", raising=False)
+
+    with caplog.at_level(logging.ERROR):
+        result = CliRunner().invoke(meta, [str(tmp_path)])
+
+    assert result.exit_code == 1
+    assert "cannot import name 'Annotation'" in caplog.text
+    assert "nimare<0.21" in caplog.text
+    assert "not installed" not in caplog.text
