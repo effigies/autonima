@@ -669,10 +669,7 @@ def meta(output_folder: str, estimator: str, estimator_args: str,
         try:
             from .meta import run_meta_analyses
         except ImportError as e:
-            log_error_with_debug(
-                logger,
-                "NiMARE is not installed. Please install with: pip install autonima[meta]"
-            )
+            log_error_with_debug(logger, str(e))
             if debug:
                 import pdb
                 pdb.post_mortem()

@@ -5,7 +5,7 @@
 Install the docs tooling:
 
 ```bash
-pip install -e .[docs]
+pip install -e ".[docs]"
 ```
 
 Build the site locally:

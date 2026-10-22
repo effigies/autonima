@@ -75,7 +75,7 @@ autonima meta projects/cue_reactivity/default/outputs
 Install the meta extra first:
 
 ```bash
-pip install -e .[meta]
+pip install -e ".[meta]"
 ```
 
 ## Next Steps

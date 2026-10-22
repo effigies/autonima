@@ -4,7 +4,11 @@ import json
 import os
 from typing import Optional, Type, Dict, Any
 from pydantic import BaseModel
-import openai
+
+try:
+    import openai
+except ImportError:  # the [llm] extra is not installed; only LLM-backed stages need it
+    openai = None
 
 
 MODEL_PREFIX_ENV = "AUTONIMA_MODEL_PREFIX"
@@ -100,6 +104,13 @@ class GenericLLMClient:
             base_url: Base URL for the API. If not provided, defaults to 
                       OpenAI's API, or OPENAI_API_GATEWAY when set.
         """
+        if openai is None:
+            raise ImportError(
+                "The openai package is not installed, and LLM-backed stages need it. "
+                'Install the llm extra: pip install -e ".[llm]" in a source checkout, '
+                'or pip install "autonima[llm]"'
+            )
+
         gateway_base_url = os.getenv("OPENAI_API_GATEWAY")
         self.base_url = base_url or gateway_base_url or None
         
@@ -111,7 +122,7 @@ class GenericLLMClient:
         if not self.api_key:
             raise ValueError(
                 "API key must be provided either as an argument or "
-                "through the appropriate environment variable"
+                "through the OPENAI_API_KEY environment variable"
             )
         
         # Initialize the client with the base URL

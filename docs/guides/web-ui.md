@@ -5,7 +5,7 @@ pipeline and produce identical outputs; they differ in what they keep track of
 for you.
 
 ```bash
-pip install -e .[ui]
+pip install -e ".[ui]"
 autonima ui --workspace .
 ```
 
