@@ -15,14 +15,14 @@ try:
     from nimare.nimads import Studyset
     from nimare.reports.base import run_reports
 except ImportError as exc:
-    # Report the real failure: an installed but incompatible NiMARE (0.21+ dropped
-    # nimare.nimads.Annotation) used to be reported as "NiMARE is not installed".
+    # Report the real failure: an installed but incompatible NiMARE used to be reported
+    # as "NiMARE is not installed".
     if getattr(exc, "name", None) == "nimare":
         message = "NiMARE is not installed."
     else:
-        message = f"Could not import NiMARE: {exc}. autonima meta needs nimare<0.21."
+        message = f"Could not import NiMARE: {exc}. autonima meta needs nimare>=0.11."
     raise ImportError(
-        f'{message} Install a supported version with: pip install "nimare<0.21"'
+        f'{message} Install a supported version with: pip install "nimare>=0.11"'
     ) from exc
 
 
